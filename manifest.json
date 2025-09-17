@@ -2,10 +2,10 @@
   "name": "Oba Açaí Slz",
   "short_name": "Oba Açaí",
   "description": "Peça seu açaí de forma rápida e prática",
-  "start_url": "/index.html",
+  "start_url": "index.html",
   "display": "standalone",
-  "background_color": "#ea1d2c",
-  "theme_color": "#ea1d2c",
+  "background_color": "#6a0dad",
+  "theme_color": "#6a0dad",
   "icons": [
     {
       "src": "obaacaislz.png",
