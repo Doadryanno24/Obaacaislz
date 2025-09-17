@@ -4,8 +4,8 @@
   "description": "Peça seu açaí de forma rápida e prática",
   "start_url": "index.html",
   "display": "standalone",
-  "background_color": "#6a0dad",
-  "theme_color": "#6a0dad",
+  "background_color": "#6b1e7f",
+  "theme_color": "#6b1e7f",
   "icons": [
     {
       "src": "logo.png",
@@ -15,6 +15,11 @@
     {
       "src": "logo.png",
       "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "logo.png",
+      "sizes": "1080x1080",
       "type": "image/png"
     }
   ]
