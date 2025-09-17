@@ -1,153 +1,292 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Admin Oba Açaí</title>
-  <link rel="stylesheet" href="css/admin.css"/>
-  <!-- Ícones para botões -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <title>Oba Açaí Delivery</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#ea1d2c">
+  <link rel="apple-touch-icon" href="icons/obaacaislz.png">
+  <meta name="theme-color" content="#6b1e7f">
 </head>
 <body>
+  <!-- Splash -->
+  <div id="splash">
+    <img src="img/obaacaislz.png" alt="Oba Açaí" class="splash-logo">
+  </div>
+
+  <!-- Header -->
   <header class="header">
-    <h1>👑 Admin Oba Açaí Slz</h1>
+    <img src="img/obaacaislz.png" alt="Oba Açaí" class="logo-img">
+    <h1>Oba Açaí Slz</h1>
     <p id="status-loja" class="status-loja">Carregando...</p>
   </header>
 
+  <!-- Conteúdo Principal -->
   <main class="main-content">
-    <!-- Seção Produtos -->
-    <section class="admin-section">
-      <h2><i class="fas fa-plus-circle"></i> Adicionar Produto</h2>
-      <div class="form-group">
-        <label>Nome do Produto</label>
-        <input type="text" id="nome-produto" placeholder="Ex: Açaí Tradicional 500ml">
-      </div>
-      <div class="form-group">
-        <label>Descrição</label>
-        <textarea id="descricao-produto" placeholder="Ingredientes, detalhes..."></textarea>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Preço (R$)</label>
-          <input type="number" id="preco-produto" placeholder="15.90" step="0.01">
-        </div>
-        <div class="form-group">
-          <label>Imagem (URL)</label>
-          <input type="text" id="img-produto" placeholder="https://exemplo.com/imagem.jpg">
-          <!-- Botão de upload (opcional) -->
-          <button id="btn-upload-imagem" class="btn-secondary">
-            <i class="fas fa-cloud-upload-alt"></i> Upload
-          </button>
-        </div>
-      </div>
 
-      <!-- Componentes/Complementos -->
-      <h3><i class="fas fa-cubes"></i> Componentes/Complementos</h3>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Nome do Componente</label>
-          <input type="text" id="nome-componente" placeholder="Ex: Morango">
-        </div>
-        <div class="form-group">
-          <label>Preço Adicional (R$)</label>
-          <input type="number" id="preco-componente" placeholder="2.50" step="0.01">
-        </div>
+    <!-- Tela Cardápio -->
+    <section id="tela-cardapio" class="tela">
+      <h2>Nosso Cardápio</h2>
+      <div id="produtos" class="grid">
+        <div class="loading">Carregando cardápio...</div>
       </div>
-      <button id="btn-adicionar-componente" class="btn-secondary">
-        <i class="fas fa-plus"></i> Adicionar Componente
-      </button>
-      <div id="componentes-lista" class="tags-container"></div>
+    </section>
 
-      <!-- Campos de Promoção -->
-      <div class="form-group">
-        <label>
-          <input type="checkbox" id="produto-promocao" />
-          Marcar como produto em promoção
-        </label>
-      </div>
-      <div id="campos-promocao" style="display: none; margin-top: 15px; padding: 15px; background: #fff3cd; border-radius: 8px; border: 1px solid #ffeaa7;">
-        <h4><i class="fas fa-tag"></i> Detalhes da Promoção</h4>
-        <div class="form-row">
+    <!-- Tela Perfil -->
+    <section id="tela-perfil" class="tela hidden">
+      <div class="perfil-container">
+        <div class="perfil-header">
+          <div class="perfil-avatar">👤</div>
+          <h2>Meu Perfil</h2>
+          <p>Complete suas informações para pedir</p>
+        </div>
+        
+        <div class="perfil-status" id="perfil-status">
+          Preencha seus dados para continuar
+        </div>
+        
+        <form class="perfil-form" id="form-perfil">
           <div class="form-group">
-            <label>Preço Promocional (R$)</label>
-            <input type="number" id="preco-promocional" placeholder="12.90" step="0.01" min="0">
+            <label class="required">Nome Completo</label>
+            <div class="input-icon">
+              <input type="text" id="perfil-nome" placeholder="Digite seu nome completo">
+            </div>
           </div>
+          
           <div class="form-group">
-            <label>Data de Término</label>
-            <input type="date" id="data-fim-promocao">
+            <label class="required">WhatsApp</label>
+            <div class="input-icon">
+              <input type="tel" id="perfil-whatsapp" placeholder="(99) 99999-9999" maxlength="15">
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="required">CEP</label>
+            <div class="input-icon">
+              <input type="text" id="perfil-cep" placeholder="00000-000" maxlength="9">
+            </div>
+            <button type="button" id="btn-buscar-cep" class="btn-buscar-cep">Buscar Endereço</button>
+            <div class="cep-loading" id="cep-loading" style="display: none;">
+              Buscando endereço...
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="required">Endereço</label>
+            <div class="input-icon">
+              <input type="text" id="perfil-endereco" placeholder="Nome da rua, avenida, etc.">
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="required">Número</label>
+            <div class="input-icon">
+              <input type="text" id="perfil-numero" placeholder="Número da casa ou apartamento">
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="required">Bairro</label>
+            <div class="input-icon">
+              <input type="text" id="perfil-bairro" placeholder="Digite seu bairro">
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="required">Cidade</label>
+            <div class="input-icon">
+              <input type="text" id="perfil-cidade" placeholder="Digite sua cidade">
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="required">Estado</label>
+            <div class="input-icon">
+              <select id="perfil-estado">
+                <option value="">Selecione seu estado</option>
+                <option value="AC">Acre</option>
+                <option value="AL">Alagoas</option>
+                <option value="AP">Amapá</option>
+                <option value="AM">Amazonas</option>
+                <option value="BA">Bahia</option>
+                <option value="CE">Ceará</option>
+                <option value="DF">Distrito Federal</option>
+                <option value="ES">Espírito Santo</option>
+                <option value="GO">Goiás</option>
+                <option value="MA">Maranhão</option>
+                <option value="MT">Mato Grosso</option>
+                <option value="MS">Mato Grosso do Sul</option>
+                <option value="MG">Minas Gerais</option>
+                <option value="PA">Pará</option>
+                <option value="PB">Paraíba</option>
+                <option value="PR">Paraná</option>
+                <option value="PE">Pernambuco</option>
+                <option value="PI">Piauí</option>
+                <option value="RJ">Rio de Janeiro</option>
+                <option value="RN">Rio Grande do Norte</option>
+                <option value="RS">Rio Grande do Sul</option>
+                <option value="SC">Santa Catarina</option>
+                <option value="SP">São Paulo</option>
+                <option value="SE">Sergipe</option>
+                <option value="TO">Tocantins</option>
+              </select>
+            </div>
+          </div>
+          
+          <button type="button" id="btn-salvar-perfil" class="btn-salvar-perfil">Salvar Perfil</button>
+        </form>
+        
+        <div class="perfil-info" id="perfil-info" style="display: none;">
+          <h3>Suas Informações</h3>
+          <div class="perfil-info-item">
+            <span class="perfil-info-label">Nome:</span>
+            <span class="perfil-info-value" id="info-nome"></span>
+          </div>
+          <div class="perfil-info-item">
+            <span class="perfil-info-label">WhatsApp:</span>
+            <span class="perfil-info-value" id="info-whatsapp"></span>
+          </div>
+          <div class="perfil-info-item">
+            <span class="perfil-info-label">Endereço:</span>
+            <span class="perfil-info-value" id="info-endereco-completo"></span>
           </div>
         </div>
-        <div class="form-group">
-          <label>Descrição da Promoção</label>
-          <input type="text" id="descricao-promocao" placeholder="Ex: Leve 2, pague 1 | 20% de desconto">
-        </div>
-      </div>
-
-      <button id="btn-salvar-produto" class="btn-primary">
-        <i class="fas fa-save"></i> Salvar Produto
-      </button>
-
-      <script>
-        document.getElementById('produto-promocao').addEventListener('change', function() {
-          const camposPromocao = document.getElementById('campos-promocao');
-          if (this.checked) {
-            camposPromocao.style.display = 'block';
-          } else {
-            camposPromocao.style.display = 'none';
-          }
-        });
-      </script>
-    </section>
-
-    <!-- Seção Gerenciar Produtos -->
-    <section class="admin-section">
-      <h2><i class="fas fa-edit"></i> Gerenciar Produtos</h2>
-      <div id="lista-produtos-admin" class="produtos-admin-lista">
-        <div class="loading">Carregando produtos...</div>
       </div>
     </section>
 
-    <!-- Seção Taxa de entrega -->
-    <section class="admin-section">
-      <h2><i class="fas fa-truck"></i> Taxa de Entrega</h2>
-      <div class="form-group">
-        <label>Valor (R$)</label>
-        <input type="number" id="input-taxa" placeholder="5.00" step="0.01">
-      </div>
-      <button id="btn-salvar-taxa" class="btn-primary">
-        <i class="fas fa-save"></i> Salvar Taxa
-      </button>
+    <!-- Tela Pedidos -->
+    <section id="tela-pedido" class="tela hidden">
+      <h2>Meus Pedidos</h2>
+      <ul id="lista-pedidos-cliente">
+        <li class="sem-pedidos">Você ainda não fez nenhum pedido</li>
+      </ul>
     </section>
 
-    <!-- Seção Pedidos -->
-    <section class="admin-section">
-      <h2><i class="fas fa-receipt"></i> Pedidos em Tempo Real</h2>
-      <ul id="lista-pedidos" class="pedidos-lista"></ul>
-    </section>
   </main>
 
-  <!-- Modal de Notificação -->
-  <div id="modal-notificacao" class="modal">
-    <div class="modal-content">
-      <span class="modal-fechar">&times;</span>
-      <h3>Enviar Notificação</h3>
-      <p>Enviar mensagem para <strong id="modal-nome-cliente"></strong>?</p>
-      <textarea id="mensagem-notificacao" placeholder="Digite sua mensagem..."></textarea>
-      <button id="btn-enviar-notificacao" class="btn-primary">
-        <i class="fab fa-whatsapp"></i> Enviar via WhatsApp
-      </button>
-      <button id="btn-enviar-comanda" class="btn-primary" style="background: #25d366; margin-top: 10px;">
-        <i class="fas fa-receipt"></i> Enviar Comanda Completa
-      </button>
+  <!-- Botão Flutuante do Carrinho -->
+  <div class="carrinho-flutuante" id="carrinho-flutuante">
+    <div class="carrinho-resumo">
+      <span class="carrinho-icone">🛒</span>
+      <span class="carrinho-itens" id="carrinho-itens-count">0 itens</span>
+      <span class="carrinho-total">R$ <span id="carrinho-total-valor">0.00</span></span>
+    </div>
+    <button class="carrinho-ver" id="btn-ver-carrinho">Ver Carrinho</button>
+  </div>
+
+  <!-- Carrinho Modal -->
+  <div class="carrinho-modal" id="carrinho-modal">
+    <div class="carrinho-header">
+      <h3>🛒 Meu Carrinho</h3>
+      <button class="carrinho-fechar" id="btn-fechar-carrinho">×</button>
+    </div>
+    
+    <div class="carrinho-corpo">
+      <ul id="lista-carrinho-modal">
+        <li class="carrinho-vazio-modal">Seu carrinho está vazio</li>
+      </ul>
+    </div>
+    
+    <div class="carrinho-rodape">
+      <div class="carrinho-totais-modal">
+        <div class="total-linha">
+          <span>Subtotal:</span>
+          <span>R$ <span id="subtotal-modal">0.00</span></span>
+        </div>
+        <div class="total-linha">
+          <span>Taxa de entrega:</span>
+          <span>R$ <span id="taxa-entrega-modal">0.00</span></span>
+        </div>
+        <div class="total-linha total-final">
+          <span><strong>Total:</strong></span>
+          <span><strong>R$ <span id="total-modal">0.00</span></strong></span>
+        </div>
+      </div>
+      <button id="btn-finalizar-modal" disabled>Preparar Pedido</button>
     </div>
   </div>
 
-  <!-- Som de notificação -->
-  <audio id="som-notificacao" preload="auto">
-    <source src="https://assets.mixkit.co/sfx/preview/mixkit-alarm-digital-clock-beep-989.mp3" type="audio/mpeg">
-    Seu navegador não suporta áudio.
-  </audio>
+  <!-- Overlay do Modal -->
+  <div class="modal-overlay" id="modal-overlay"></div>
 
-  <script type="module" src="js/admin.js"></script>
+  <!-- Modal do Produto -->
+  <div class="modal-overlay-produto" id="modal-overlay-produto">
+    <div class="produto-modal" id="produto-modal">
+      <div class="produto-modal-header">
+        <h3 id="modal-produto-nome">Nome do Produto</h3>
+        <button class="produto-modal-fechar" id="btn-fechar-modal-produto">&times;</button>
+      </div>
+      <div class="produto-modal-body">
+        <div class="produto-modal-info">
+          <img id="modal-produto-img" src="" alt="Imagem do Produto" onerror="this.src='img/placeholder.png'">
+          <p id="modal-produto-descricao" class="produto-modal-descricao"></p>
+          <p id="modal-produto-preco" class="produto-modal-preco">R$ 0.00</p>
+        </div>
+
+        <div class="produto-modal-componentes" id="modal-componentes-container">
+          <h4>Ingredientes Inclusos:</h4>
+          <ul id="modal-lista-componentes">
+            <!-- Componentes -->
+          </ul>
+        </div>
+
+        <div class="produto-modal-complementos" id="modal-complementos-container">
+          <h4>Adicione ao seu pedido:</h4>
+          <div id="modal-lista-complementos">
+            <!-- Complementos -->
+          </div>
+        </div>
+      </div>
+      <div class="produto-modal-footer">
+        <button id="btn-adicionar-ao-carrinho-modal" class="btn-adicionar-carrinho-modal">
+          Adicionar ao Carrinho
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navegação Inferior -->
+  <nav class="nav-bottom">
+    <button onclick="mostrarTela('tela-cardapio')" class="nav-button active" id="btn-cardapio">
+      <img src="ic_cardapio.png" alt="Cardápio">
+      <span>Cardápio</span>
+    </button>
+    <button onclick="mostrarTela('tela-perfil')" class="nav-button" id="btn-perfil">
+      <img src="ic_perfil.png" alt="Perfil">
+      <span>Perfil</span>
+    </button>
+    <button onclick="mostrarTela('tela-pedido')" class="nav-button" id="btn-pedidos">
+      <img src="ic_food.png" alt="Pedidos">
+      <span>Pedidos</span>
+    </button>
+  </nav>
+
+  <!-- Script da splash -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      setTimeout(() => {
+        const splash = document.getElementById("splash");
+        if(splash) splash.style.display = "none";
+        document.dispatchEvent(new Event("splashFinalizada"));
+      }, 3000);
+    });
+  </script>
+
+  <!-- Modal de Instalação PWA -->
+  <div id="instalar-modal" class="instalar-modal" style="display:none;">
+    <div class="instalar-conteudo">
+      <h2>📲 Instale nosso App!</h2>
+      <p>Tenha o Oba Açaí na tela inicial do seu celular, rápido e prático.</p>
+      <div class="botoes">
+        <button id="btn-confirmar-instalar" class="btn-instalar-modal">Instalar</button>
+        <button id="btn-fechar-instalar" class="btn-fechar-modal">Agora não</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Script principal -->
+  <script type="module" src="app.js"></script>
 </body>
-  </html>
+                                                   </html>
