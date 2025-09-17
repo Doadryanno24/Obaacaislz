@@ -11,12 +11,12 @@
   <meta name="theme-color" content="#6b1e7f">
 </head>
 <body>
-  <!-- Splash -->
+  <!-- splash-->
   <div id="splash">
     <img src="obaacaislz.png" alt="Oba Açaí" class="splash-logo">
   </div>
 
-  <!-- Header -->
+  <!-- Header Profissional -->
   <header class="header">
     <img src="obaacaislz.png" alt="Oba Açaí" class="logo-img">
     <h1>Oba Açaí Slz</h1>
@@ -28,13 +28,13 @@
 
     <!-- Tela Cardápio -->
     <section id="tela-cardapio" class="tela">
-      <h2>Nosso Cardápio</h2>
+      <h2> Nosso Cardápio</h2>
       <div id="produtos" class="grid">
         <div class="loading">Carregando cardápio...</div>
       </div>
     </section>
 
-    <!-- Tela Perfil -->
+    <!-- Tela Perfil - ATUALIZADA com CEP e Número da Casa -->
     <section id="tela-perfil" class="tela hidden">
       <div class="perfil-container">
         <div class="perfil-header">
@@ -76,16 +76,15 @@
           <div class="form-group">
             <label class="required">Endereço</label>
             <div class="input-icon">
-              <input type="text" id="perfil-endereco" placeholder="Nome da rua, avenida, etc.">
+              <input type="text" id="perfil-endereco" placeholder="Rua, número, complemento">
             </div>
           </div>
-          
+
+          <!-- NOVO CAMPO: Número da Casa -->
           <div class="form-group">
-            <label class="required">Número</label>
-            <div class="input-icon">
-              <input type="text" id="perfil-numero" placeholder="Número da casa ou apartamento">
-            </div>
-          </div>
+  <label for="perfil-numero">Número:</label>
+  <input type="text" id="perfil-numero" placeholder="Ex: 123, Apto 101, Casa B">
+</div>
           
           <div class="form-group">
             <label class="required">Bairro</label>
@@ -127,6 +126,8 @@
                 <option value="RJ">Rio de Janeiro</option>
                 <option value="RN">Rio Grande do Norte</option>
                 <option value="RS">Rio Grande do Sul</option>
+                <option value="RO">Rondônia</option>
+                <option value="RR">Roraima</option>
                 <option value="SC">Santa Catarina</option>
                 <option value="SP">São Paulo</option>
                 <option value="SE">Sergipe</option>
@@ -158,7 +159,7 @@
 
     <!-- Tela Pedidos -->
     <section id="tela-pedido" class="tela hidden">
-      <h2>Meus Pedidos</h2>
+      <h2> Meus Pedidos</h2>
       <ul id="lista-pedidos-cliente">
         <li class="sem-pedidos">Você ainda não fez nenhum pedido</li>
       </ul>
@@ -226,16 +227,16 @@
         </div>
 
         <div class="produto-modal-componentes" id="modal-componentes-container">
-          <h4>Ingredientes Inclusos:</h4>
+          <h4> Ingredientes Inclusos:</h4>
           <ul id="modal-lista-componentes">
-            <!-- Componentes -->
+            <!-- Componentes serão inseridos aqui pelo JS -->
           </ul>
         </div>
 
         <div class="produto-modal-complementos" id="modal-complementos-container">
-          <h4>Adicione ao seu pedido:</h4>
+          <h4> Adicione ao seu pedido:</h4>
           <div id="modal-lista-complementos">
-            <!-- Complementos -->
+            <!-- Complementos serão inseridos aqui pelo JS -->
           </div>
         </div>
       </div>
@@ -269,22 +270,9 @@
       setTimeout(() => {
         const splash = document.getElementById("splash");
         if(splash) splash.style.display = "none";
-        document.dispatchEvent(new Event("splashFinalizada"));
-      }, 3000);
+      }, 3000); // splash dura 3 segundos
     });
   </script>
-
-  <!-- Modal de Instalação PWA -->
-  <div id="instalar-modal" class="instalar-modal" style="display:none;">
-    <div class="instalar-conteudo">
-      <h2>📲 Instale nosso App!</h2>
-      <p>Tenha o Oba Açaí na tela inicial do seu celular, rápido e prático.</p>
-      <div class="botoes">
-        <button id="btn-confirmar-instalar" class="btn-instalar-modal">Instalar</button>
-        <button id="btn-fechar-instalar" class="btn-fechar-modal">Agora não</button>
-      </div>
-    </div>
-  </div>
 
   <!-- Script principal -->
   <script type="module" src="app.js"></script>
