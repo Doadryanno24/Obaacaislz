@@ -8,17 +8,17 @@
   "theme_color": "#6b1e7f",
   "icons": [
     {
-      "src": "obaacaislzL.png",
+      "src": "icone.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "obaacaislzL.png",
+      "src": "icone.png",
       "sizes": "512x512",
       "type": "image/png"
     },
     {
-      "src": "obaacaislzL.png",
+      "src": "icone.png",
       "sizes": "1080x1080",
       "type": "image/png"
     }
