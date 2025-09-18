@@ -4,23 +4,20 @@
   "description": "Peça seu açaí de forma rápida e prática",
   "start_url": "index.html",
   "display": "standalone",
-  "background_color": "#6b1e7f",
-  "theme_color": "#6b1e7f",
+  "background_color": "#6a0dad",
+  "theme_color": "#6a0dad",
   "icons": [
     {
-      "src": "icone.png",
+      "src": "obaacaislz.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
-      "src": "icone.png",
+      "src": "obaacaislz.png",
       "sizes": "512x512",
-      "type": "image/png"
-    },
-    {
-      "src": "icone.png",
-      "sizes": "1080x1080",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
