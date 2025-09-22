@@ -8,33 +8,28 @@
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#6a0dad">
   <link rel="apple-touch-icon" href="obaacaislz.png">
-  <meta name="theme-color" content="#6a0dad">
 </head>
 <body>
-  <!-- splash-->
   <div id="splash">
     <img src="obaacaislz.png" alt="Oba Açaí" class="splash-logo">
   </div>
 
-  <!-- Header Profissional -->
   <header class="header">
     <img src="obaacaislz.png" alt="Oba Açaí" class="logo-img">
     <h1>Oba Açaí Slz</h1>
     <p id="status-loja" class="status-loja">Carregando...</p>
   </header>
 
-  <!-- Conteúdo Principal -->
   <main class="main-content">
 
-    <!-- Tela Cardápio -->
     <section id="tela-cardapio" class="tela">
-      <h2> Nosso Cardápio</h2>
+      <h2>Nosso Cardápio</h2>
+
       <div id="produtos" class="grid">
         <div class="loading">Carregando cardápio...</div>
       </div>
     </section>
 
-    <!-- Tela Perfil - ATUALIZADA com CEP e Número da Casa -->
     <section id="tela-perfil" class="tela hidden">
       <div class="perfil-container">
         <div class="perfil-header">
@@ -80,19 +75,22 @@
             </div>
           </div>
 
-          <!-- NOVO CAMPO: Número da Casa -->
           <div class="form-group">
-  <label for="perfil-numero">Número:</label>
-  <input type="text" id="perfil-numero" placeholder="Ex: 123, Apto 101, Casa B">
-</div>
-          
+            <label for="perfil-numero">Número:</label>
+            <input type="text" id="perfil-numero" placeholder="Ex: 123, Apto 101, Casa B">
+          </div>
           <div class="form-group">
             <label class="required">Bairro</label>
             <div class="input-icon">
               <input type="text" id="perfil-bairro" placeholder="Digite seu bairro">
             </div>
           </div>
-          
+          <div class="form-group">
+            <label for="perfil-referencia">Ponto de Referência</label>
+            <div class="input-icon">
+              <input type="text" id="perfil-referencia" placeholder="Ex: Ao lado da praça, portão azul">
+            </div>
+          </div>
           <div class="form-group">
             <label class="required">Cidade</label>
             <div class="input-icon">
@@ -153,11 +151,14 @@
             <span class="perfil-info-label">Endereço:</span>
             <span class="perfil-info-value" id="info-endereco-completo"></span>
           </div>
-        </div>
+          
+         <div class="perfil-info-item">
+           <span class="perfil-info-label">Ponto de Referência:</span><span class="perfil-info-value" id="info-referencia"></span>
+          </div>
+          </div>
       </div>
     </section>
 
-    <!-- Tela Pedidos -->
     <section id="tela-pedido" class="tela hidden">
       <h2> Meus Pedidos</h2>
       <ul id="lista-pedidos-cliente">
@@ -167,7 +168,6 @@
 
   </main>
 
-  <!-- Botão Flutuante do Carrinho -->
   <div class="carrinho-flutuante" id="carrinho-flutuante">
     <div class="carrinho-resumo">
       <span class="carrinho-icone">🛒</span>
@@ -177,7 +177,6 @@
     <button class="carrinho-ver" id="btn-ver-carrinho">Ver Carrinho</button>
   </div>
 
-  <!-- Carrinho Modal -->
   <div class="carrinho-modal" id="carrinho-modal">
     <div class="carrinho-header">
       <h3>🛒 Meu Carrinho</h3>
@@ -209,10 +208,8 @@
     </div>
   </div>
 
-  <!-- Overlay do Modal -->
   <div class="modal-overlay" id="modal-overlay"></div>
 
-  <!-- Modal do Produto -->
   <div class="modal-overlay-produto" id="modal-overlay-produto">
     <div class="produto-modal" id="produto-modal">
       <div class="produto-modal-header">
@@ -229,15 +226,13 @@
         <div class="produto-modal-componentes" id="modal-componentes-container">
           <h4> Ingredientes Inclusos:</h4>
           <ul id="modal-lista-componentes">
-            <!-- Componentes serão inseridos aqui pelo JS -->
-          </ul>
+            </ul>
         </div>
 
         <div class="produto-modal-complementos" id="modal-complementos-container">
           <h4> Adicione ao seu pedido:</h4>
           <div id="modal-lista-complementos">
-            <!-- Complementos serão inseridos aqui pelo JS -->
-          </div>
+            </div>
         </div>
       </div>
       <div class="produto-modal-footer">
@@ -248,7 +243,6 @@
     </div>
   </div>
 
-  <!-- Navegação Inferior -->
   <nav class="nav-bottom">
     <button onclick="mostrarTela('tela-cardapio')" class="nav-button active" id="btn-cardapio">
       <img src="ic_cardapio.png" alt="Cardápio">
@@ -264,7 +258,6 @@
     </button>
   </nav>
 
-  <!-- Script da splash -->
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       setTimeout(() => {
@@ -274,7 +267,6 @@
     });
   </script>
 
-  <!-- Script principal -->
   <script type="module" src="app.js"></script>
 </body>
 </html>
