@@ -131,17 +131,20 @@ window.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-// ✅ NOVA FUNÇÃO: Tenta abrir no navegador nativo e, se falhar, informa o usuário.
+// ✅ CORRIGIDO: Tenta abrir no navegador nativo e, se falhar, informa o usuário.
 function abrirLinkExterno(url) {
   const userAgent = navigator.userAgent || navigator.vendor || window.opera;
   const isAndroid = /Android/.test(userAgent);
   const isIOS = /iPad|iPhone|iPod/.test(userAgent);
   let linkAberto = false;
 
+  // Remove o protocolo existente para evitar duplicidade
+  const urlLimpa = url.replace(/^(https?:\/\/)/, '');
+  
   // Tenta o método "intent" para Android, que é mais robusto
   if (isAndroid) {
     try {
-      const intentUrl = `intent:${url}#Intent;scheme=https;package=com.android.chrome;end;`;
+      const intentUrl = `intent:${urlLimpa}#Intent;scheme=https;package=com.android.chrome;end;`;
       window.location.href = intentUrl;
       linkAberto = true;
     } catch (e) {
@@ -157,7 +160,6 @@ function abrirLinkExterno(url) {
     // Se o pop-up for bloqueado, newWindow será null ou undefined
     if (!newWindow) {
       // Abre uma URL com o protocolo 'safari' para iOS ou apenas a URL para outros casos.
-      // O protocolo 'safari' força a abertura no navegador Safari no iOS, mesmo em webviews.
       const fallbackUrl = isIOS ? `safari-v${url}` : url;
       window.location.href = fallbackUrl;
     }
@@ -315,8 +317,8 @@ function preencherFormularioComPerfil(perfil) {
   document.getElementById("perfil-endereco").value = perfil.endereco || '';
   document.getElementById("perfil-numero").value = perfil.numero || '';
   document.getElementById("perfil-bairro").value = perfil.bairro || '';
-  document.getElementById("perfil-cidade").value = perfil.cidade || '';
-  document.getElementById("perfil-estado").value = perfil.estado || '';
+  document.getElementById("perfil-cidade").value = perfil.localidade || '';
+  document.getElementById("perfil-estado").value = perfil.uf || '';
   document.getElementById("perfil-referencia").value = perfil.referencia || ''; // ✅ ALTERAÇÃO: Adicionado o campo de referência
 }
 
