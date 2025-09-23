@@ -9,12 +9,12 @@
   "theme_color": "#6a0dad",
   "icons": [
     {
-      "src": "ic-oba.png",
+      "src": "acailogo.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "ic-oba.png",
+      "src": "acailogo.png",
       "sizes": "512x512",
       "type": "image/png"
     }
