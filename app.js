@@ -1,5 +1,4 @@
-
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+Import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 import {
   getDatabase,
   ref,
@@ -90,6 +89,9 @@ window.addEventListener("DOMContentLoaded", () => {
   carregarPerfil();
   setInterval(atualizarStatusLoja, 60000);
 
+  // ✅ NOVO: Chama a função para verificar o navegador
+  verificarEAlertarNavegadorIncompativel();
+
   // Event listeners para perfil
   document.getElementById("btn-salvar-perfil").addEventListener("click", salvarPerfil);
   document.getElementById("btn-buscar-cep").addEventListener("click", () => {
@@ -128,24 +130,23 @@ window.addEventListener("DOMContentLoaded", () => {
     // Apenas mostra o prompt visualmente, sem a lógica de remover imediatamente.
     mostrarPromptInstalacao();
   });
-
-  // ✅ VERIFICA SE ESTÁ NO WHATSAPP E MOSTRA MENSAGEM
-  verificarAmbienteWhatsApp();
 });
 
-// ✅ FUNÇÃO PARA VERIFICAR SE ESTÁ NO WHATSAPP
-function verificarAmbienteWhatsApp() {
-  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-  const isAndroid = /Android/.test(navigator.userAgent);
+// ✅ FUNÇÃO PARA VERIFICAR E AVISAR SOBRE NAVEGADORES EMBUTIDOS
+function verificarEAlertarNavegadorIncompativel() {
+  const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+  const isIOS = /iPad|iPhone|iPod/.test(userAgent);
+  const isAndroid = /Android/.test(userAgent);
   const isMobile = isIOS || isAndroid;
 
-  // Verifica se está dentro do WebView do WhatsApp
-  const isInsideWhatsApp = /WhatsApp/.test(navigator.userAgent);
+  // Detecta navegadores embutidos comuns
+  const isInsideWhatsApp = /WhatsApp/.test(userAgent);
+  const isInsideInstagram = /Instagram/.test(userAgent);
+  const isInsideWebView = isInsideWhatsApp || isInsideInstagram;
 
-  if (isMobile && isInsideWhatsApp) {
-    // Está no WhatsApp, mostra botão para abrir no navegador
+  if (isMobile && isInsideWebView) {
     const container = document.createElement('div');
-    container.id = 'whatsapp-prompt';
+    container.id = 'webview-prompt';
     container.style.cssText = `
       position: fixed;
       top: 0;
@@ -159,12 +160,15 @@ function verificarAmbienteWhatsApp() {
       font-weight: 500;
       z-index: 9999;
       box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
     `;
 
     container.innerHTML = `
       <span>💡 Para melhor experiência, abra este cardápio no navegador Chrome ou Safari!</span>
       <button id="btn-abrir-navegador" style="
-        margin-left: 10px;
         padding: 6px 12px;
         background: white;
         color: #ea1d2c;
@@ -175,18 +179,14 @@ function verificarAmbienteWhatsApp() {
       ">Abrir no Navegador</button>
     `;
 
-    document.body.appendChild(container);
+    if (!document.getElementById('webview-prompt')) {
+      document.body.appendChild(container);
 
-    document.getElementById('btn-abrir-navegador').addEventListener('click', () => {
-      const urlAtual = window.location.href;
-      if (isIOS) {
-        // iOS: Força abertura no Safari
-        window.open(urlAtual, '_system');
-      } else {
-        // Android: Mostra opções de apps
+      document.getElementById('btn-abrir-navegador').addEventListener('click', () => {
+        const urlAtual = window.location.href;
         window.open(urlAtual, '_blank');
-      }
-    });
+      });
+    }
   }
 }
 
@@ -1306,4 +1306,3 @@ function mostrarNotificacao(mensagem) {
     }, 500); // O tempo precisa ser o mesmo da transição CSS
   }, 3000); // 3000ms = 3 segundos
 }
-
