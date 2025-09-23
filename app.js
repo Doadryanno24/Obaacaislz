@@ -48,7 +48,7 @@ let perfilCliente = {
   bairro: '',
   cidade: '',
   estado: '',
-  referencia: '' // ✅ ALTERAÇÃO: Adicionado o campo de referência
+  referencia: ''
 };
 
 // --- Variáveis globais para o modal do produto ---
@@ -127,23 +127,38 @@ window.addEventListener("DOMContentLoaded", () => {
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPrompt = e;
-    // Apenas mostra o prompt visualmente, sem a lógica de remover imediatamente.
     mostrarPromptInstalacao();
   });
 });
 
+// ✅ FUNÇÃO CORRIGIDA PARA ABRIR LINK NO NAVEGADOR EXTERNO
+function abrirLinkExterno(url) {
+  const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+  const isAndroid = /Android/.test(userAgent);
+  const isIOS = /iPad|iPhone|iPod/.test(userAgent);
+
+  if (isAndroid) {
+    // Para Android, usa o protocolo 'intent' com uma fallback URL.
+    const intentUrl = `intent:${url}#Intent;scheme=https;package=com.android.chrome;end;`;
+    window.location.href = intentUrl;
+  } else if (isIOS) {
+    // Para iOS, tenta abrir diretamente.
+    window.open(url, '_blank');
+  } else {
+    // Para desktops e outros, abre uma nova aba normalmente.
+    window.open(url, '_blank');
+  }
+}
+
 // ✅ FUNÇÃO PARA VERIFICAR E AVISAR SOBRE NAVEGADORES EMBUTIDOS
 function verificarEAlertarNavegadorIncompativel() {
   const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-  const isIOS = /iPad|iPhone|iPod/.test(userAgent);
-  const isAndroid = /Android/.test(userAgent);
-  const isMobile = isIOS || isAndroid;
-
-  // Detecta navegadores embutidos comuns
   const isInsideWhatsApp = /WhatsApp/.test(userAgent);
   const isInsideInstagram = /Instagram/.test(userAgent);
+  const isMobile = /Android|iPhone|iPad|iPod/i.test(userAgent);
   const isInsideWebView = isInsideWhatsApp || isInsideInstagram;
 
+  // Mostra o alerta apenas em navegadores embutidos no celular
   if (isMobile && isInsideWebView) {
     const container = document.createElement('div');
     container.id = 'webview-prompt';
@@ -167,7 +182,7 @@ function verificarEAlertarNavegadorIncompativel() {
     `;
 
     container.innerHTML = `
-      <span>💡 Para melhor experiência, abra este cardápio no navegador Chrome ou Safari!</span>
+      <span>💡 Para melhor experiência, abra no seu navegador principal!</span>
       <button id="btn-abrir-navegador" style="
         padding: 6px 12px;
         background: white;
@@ -182,9 +197,10 @@ function verificarEAlertarNavegadorIncompativel() {
     if (!document.getElementById('webview-prompt')) {
       document.body.appendChild(container);
 
+      // ✅ ATUALIZADO: Chama a nova função ao clicar no botão
       document.getElementById('btn-abrir-navegador').addEventListener('click', () => {
         const urlAtual = window.location.href;
-        window.open(urlAtual, '_blank');
+        abrirLinkExterno(urlAtual);
       });
     }
   }
@@ -333,7 +349,7 @@ async function carregarPerfil() {
   }
 }
 
-// Função para buscar endereço por CEP — ✅ URL CORRIGIDA (SEM ESPAÇO!)
+// Função para buscar endereço por CEP
 async function buscarEnderecoPorCEP(cep) {
   const loading = document.getElementById("cep-loading");
   const btnBuscar = document.getElementById("btn-buscar-cep");
@@ -374,7 +390,7 @@ async function salvarPerfil() {
   const bairro = document.getElementById("perfil-bairro").value.trim();
   const cidade = document.getElementById("perfil-cidade").value.trim();
   const estado = document.getElementById("perfil-estado").value.trim();
-  const referencia = document.getElementById("perfil-referencia").value.trim(); // ✅ ALTERAÇÃO: Captura o novo campo
+  const referencia = document.getElementById("perfil-referencia").value.trim();
   
   // Validação: campos obrigatórios
   if (!nome || !whatsapp || !endereco || !numero) {
@@ -392,7 +408,7 @@ async function salvarPerfil() {
     bairro,
     cidade,
     estado,
-    referencia // ✅ ALTERAÇÃO: Inclui a referência no objeto
+    referencia
   };
   
   try {
@@ -1018,7 +1034,7 @@ document.getElementById("btn-finalizar-modal").addEventListener("click", async (
       bairro: perfilCliente.bairro,
       cidade: perfilCliente.cidade,
       estado: perfilCliente.estado,
-      referencia: perfilCliente.referencia // ✅ ALTERAÇÃO: Incluído no objeto do pedido
+      referencia: perfilCliente.referencia
     },
     itens: [...carrinho],
     subtotal: subtotal,
@@ -1306,3 +1322,4 @@ function mostrarNotificacao(mensagem) {
     }, 500); // O tempo precisa ser o mesmo da transição CSS
   }, 3000); // 3000ms = 3 segundos
 }
+
