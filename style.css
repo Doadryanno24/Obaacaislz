@@ -171,6 +171,7 @@ section h2::before {
   overflow: hidden;         /* Esconde qualquer excesso */
   border-radius: 12px;      /* Cantos arredondados */
   background-color: transparent; /* Fundo transparente */
+  padding-left: 5px;
 }
 
 .card-img-container img {
