@@ -1105,35 +1105,6 @@ function mostrarModalEnvioManual(mensagem, pedido) {
       white-space: pre-wrap;
       word-break: break-word;
     ">${mensagem}</div>
-   <a href="${urlWhatsApp}" target="_blank"
-        style="
-            display: inline-block;
-            text-decoration: none;
-            padding: 12px 24px;
-            background: #25d366;
-            color: white;
-            border-radius: 6px;
-            font-weight: 600;
-            width: 100%;
-            margin-top: 20px;
-            font-size: 1rem;
-        ">
-        <i class="fab fa-whatsapp"></i> Enviar Pedido pelo WhatsApp
-    </a>
-    <button onclick="copiarComanda()"
-            style="
-              padding: 12px 24px;
-              background: #007bff;
-              color: white;
-              border: none;
-              border-radius: 6px;
-              cursor: pointer;
-              font-weight: 600;
-              width: 100%;
-              margin-top: 10px;
-            ">
-      Copiar Comanda
-    </button>
     <button onclick="this.closest('.modal-overlay-temp').remove()"
             style="
               padding: 12px 24px;
