@@ -131,35 +131,47 @@ window.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-// ✅ FUNÇÃO CORRIGIDA PARA ABRIR LINK NO NAVEGADOR EXTERNO
+// ✅ NOVA FUNÇÃO: Tenta abrir no navegador nativo e, se falhar, informa o usuário.
 function abrirLinkExterno(url) {
   const userAgent = navigator.userAgent || navigator.vendor || window.opera;
   const isAndroid = /Android/.test(userAgent);
   const isIOS = /iPad|iPhone|iPod/.test(userAgent);
+  let linkAberto = false;
 
+  // Tenta o método "intent" para Android, que é mais robusto
   if (isAndroid) {
-    // Para Android, usa o protocolo 'intent' com uma fallback URL.
-    const intentUrl = `intent:${url}#Intent;scheme=https;package=com.android.chrome;end;`;
-    window.location.href = intentUrl;
-  } else if (isIOS) {
-    // Para iOS, tenta abrir diretamente.
-    window.open(url, '_blank');
-  } else {
-    // Para desktops e outros, abre uma nova aba normalmente.
-    window.open(url, '_blank');
+    try {
+      const intentUrl = `intent:${url}#Intent;scheme=https;package=com.android.chrome;end;`;
+      window.location.href = intentUrl;
+      linkAberto = true;
+    } catch (e) {
+      console.error("Falha ao abrir com Intent:", e);
+    }
+  }
+
+  // Se não for Android ou se o Intent falhou, tenta o método padrão
+  if (!linkAberto) {
+    // Para iOS e outros navegadores, tenta o window.open
+    const newWindow = window.open(url, '_blank');
+
+    // Se o pop-up for bloqueado, newWindow será null ou undefined
+    if (!newWindow) {
+      // Abre uma URL com o protocolo 'safari' para iOS ou apenas a URL para outros casos.
+      // O protocolo 'safari' força a abertura no navegador Safari no iOS, mesmo em webviews.
+      const fallbackUrl = isIOS ? `safari-v${url}` : url;
+      window.location.href = fallbackUrl;
+    }
   }
 }
 
-// ✅ FUNÇÃO PARA VERIFICAR E AVISAR SOBRE NAVEGADORES EMBUTIDOS
+// ✅ FUNÇÃO ATUALIZADA: Chama a função para tentar abrir no navegador externo.
 function verificarEAlertarNavegadorIncompativel() {
   const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-  const isInsideWhatsApp = /WhatsApp/.test(userAgent);
   const isInsideInstagram = /Instagram/.test(userAgent);
   const isMobile = /Android|iPhone|iPad|iPod/i.test(userAgent);
-  const isInsideWebView = isInsideWhatsApp || isInsideInstagram;
 
-  // Mostra o alerta apenas em navegadores embutidos no celular
-  if (isMobile && isInsideWebView) {
+  // Mostra o alerta apenas se for um celular e estiver no Instagram
+  if (isMobile && isInsideInstagram) {
     const container = document.createElement('div');
     container.id = 'webview-prompt';
     container.style.cssText = `
@@ -182,7 +194,7 @@ function verificarEAlertarNavegadorIncompativel() {
     `;
 
     container.innerHTML = `
-      <span>💡 Para melhor experiência, abra no seu navegador principal!</span>
+      <span>💡 Para melhor experiência, use o navegador do seu celular!</span>
       <button id="btn-abrir-navegador" style="
         padding: 6px 12px;
         background: white;
@@ -197,7 +209,7 @@ function verificarEAlertarNavegadorIncompativel() {
     if (!document.getElementById('webview-prompt')) {
       document.body.appendChild(container);
 
-      // ✅ ATUALIZADO: Chama a nova função ao clicar no botão
+      // Event listener que agora chama a nova função `abrirLinkExterno()`
       document.getElementById('btn-abrir-navegador').addEventListener('click', () => {
         const urlAtual = window.location.href;
         abrirLinkExterno(urlAtual);
@@ -1322,4 +1334,3 @@ function mostrarNotificacao(mensagem) {
     }, 500); // O tempo precisa ser o mesmo da transição CSS
   }, 3000); // 3000ms = 3 segundos
 }
-
