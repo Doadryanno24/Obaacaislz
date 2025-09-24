@@ -48,7 +48,7 @@ let perfilCliente = {
   bairro: '',
   cidade: '',
   estado: '',
-  referencia: ''
+  referencia: '' // ✅ ALTERAÇÃO: Adicionado o campo de referência
 };
 
 // --- Variáveis globais para o modal do produto ---
@@ -127,53 +127,24 @@ window.addEventListener("DOMContentLoaded", () => {
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPrompt = e;
+    // Apenas mostra o prompt visualmente, sem a lógica de remover imediatamente.
     mostrarPromptInstalacao();
   });
 });
 
-// ✅ CORRIGIDO: Tenta abrir no navegador nativo e, se falhar, informa o usuário.
-function abrirLinkExterno(url) {
-  const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-  const isAndroid = /Android/.test(userAgent);
-  const isIOS = /iPad|iPhone|iPod/.test(userAgent);
-  let linkAberto = false;
-
-  // Remove o protocolo existente para evitar duplicidade
-  const urlLimpa = url.replace(/^(https?:\/\/)/, '');
-  
-  // Tenta o método "intent" para Android, que é mais robusto
-  if (isAndroid) {
-    try {
-      const intentUrl = `intent:${urlLimpa}#Intent;scheme=https;package=com.android.chrome;end;`;
-      window.location.href = intentUrl;
-      linkAberto = true;
-    } catch (e) {
-      console.error("Falha ao abrir com Intent:", e);
-    }
-  }
-
-  // Se não for Android ou se o Intent falhou, tenta o método padrão
-  if (!linkAberto) {
-    // Para iOS e outros navegadores, tenta o window.open
-    const newWindow = window.open(url, '_blank');
-
-    // Se o pop-up for bloqueado, newWindow será null ou undefined
-    if (!newWindow) {
-      // Abre uma URL com o protocolo 'safari' para iOS ou apenas a URL para outros casos.
-      const fallbackUrl = isIOS ? `safari-v${url}` : url;
-      window.location.href = fallbackUrl;
-    }
-  }
-}
-
-// ✅ FUNÇÃO ATUALIZADA: Chama a função para tentar abrir no navegador externo.
+// ✅ FUNÇÃO PARA VERIFICAR E AVISAR SOBRE NAVEGADORES EMBUTIDOS
 function verificarEAlertarNavegadorIncompativel() {
   const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-  const isInsideInstagram = /Instagram/.test(userAgent);
-  const isMobile = /Android|iPhone|iPad|iPod/i.test(userAgent);
+  const isIOS = /iPad|iPhone|iPod/.test(userAgent);
+  const isAndroid = /Android/.test(userAgent);
+  const isMobile = isIOS || isAndroid;
 
-  // Mostra o alerta apenas se for um celular e estiver no Instagram
-  if (isMobile && isInsideInstagram) {
+  // Detecta navegadores embutidos comuns
+  const isInsideWhatsApp = /WhatsApp/.test(userAgent);
+  const isInsideInstagram = /Instagram/.test(userAgent);
+  const isInsideWebView = isInsideWhatsApp || isInsideInstagram;
+
+  if (isMobile && isInsideWebView) {
     const container = document.createElement('div');
     container.id = 'webview-prompt';
     container.style.cssText = `
@@ -196,7 +167,7 @@ function verificarEAlertarNavegadorIncompativel() {
     `;
 
     container.innerHTML = `
-      <span>💡 Para melhor experiência, use o navegador do seu celular!</span>
+      <span>💡 Para melhor experiência, abra este cardápio no navegador Chrome ou Safari!</span>
       <button id="btn-abrir-navegador" style="
         padding: 6px 12px;
         background: white;
@@ -211,10 +182,9 @@ function verificarEAlertarNavegadorIncompativel() {
     if (!document.getElementById('webview-prompt')) {
       document.body.appendChild(container);
 
-      // Event listener que agora chama a nova função `abrirLinkExterno()`
       document.getElementById('btn-abrir-navegador').addEventListener('click', () => {
         const urlAtual = window.location.href;
-        abrirLinkExterno(urlAtual);
+        window.open(urlAtual, '_blank');
       });
     }
   }
@@ -317,8 +287,8 @@ function preencherFormularioComPerfil(perfil) {
   document.getElementById("perfil-endereco").value = perfil.endereco || '';
   document.getElementById("perfil-numero").value = perfil.numero || '';
   document.getElementById("perfil-bairro").value = perfil.bairro || '';
-  document.getElementById("perfil-cidade").value = perfil.localidade || '';
-  document.getElementById("perfil-estado").value = perfil.uf || '';
+  document.getElementById("perfil-cidade").value = perfil.cidade || '';
+  document.getElementById("perfil-estado").value = perfil.estado || '';
   document.getElementById("perfil-referencia").value = perfil.referencia || ''; // ✅ ALTERAÇÃO: Adicionado o campo de referência
 }
 
@@ -363,7 +333,7 @@ async function carregarPerfil() {
   }
 }
 
-// Função para buscar endereço por CEP
+// Função para buscar endereço por CEP — ✅ URL CORRIGIDA (SEM ESPAÇO!)
 async function buscarEnderecoPorCEP(cep) {
   const loading = document.getElementById("cep-loading");
   const btnBuscar = document.getElementById("btn-buscar-cep");
@@ -404,7 +374,7 @@ async function salvarPerfil() {
   const bairro = document.getElementById("perfil-bairro").value.trim();
   const cidade = document.getElementById("perfil-cidade").value.trim();
   const estado = document.getElementById("perfil-estado").value.trim();
-  const referencia = document.getElementById("perfil-referencia").value.trim();
+  const referencia = document.getElementById("perfil-referencia").value.trim(); // ✅ ALTERAÇÃO: Captura o novo campo
   
   // Validação: campos obrigatórios
   if (!nome || !whatsapp || !endereco || !numero) {
@@ -422,7 +392,7 @@ async function salvarPerfil() {
     bairro,
     cidade,
     estado,
-    referencia
+    referencia // ✅ ALTERAÇÃO: Inclui a referência no objeto
   };
   
   try {
@@ -1048,7 +1018,7 @@ document.getElementById("btn-finalizar-modal").addEventListener("click", async (
       bairro: perfilCliente.bairro,
       cidade: perfilCliente.cidade,
       estado: perfilCliente.estado,
-      referencia: perfilCliente.referencia
+      referencia: perfilCliente.referencia // ✅ ALTERAÇÃO: Incluído no objeto do pedido
     },
     itens: [...carrinho],
     subtotal: subtotal,
